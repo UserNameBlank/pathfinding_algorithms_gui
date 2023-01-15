@@ -1,9 +1,8 @@
-use std::fmt::Error;
 use crate::{AMOUNT_OF_CELLS_ROW, CellState, Position};
 
-fn manhattan(pa: Position, pb: Position) -> u32 {
-    ((pb.0 as isize - pa.0 as isize).abs() + (pb.1 as isize - pa.1 as isize).abs()) as u32
-}
+// fn manhattan(pa: Position, pb: Position) -> u32 {
+//     ((pb.0 as isize - pa.0 as isize).abs() + (pb.1 as isize - pa.1 as isize).abs()) as u32
+// }
 
 fn tchebychev(pa: Position, pb: Position) -> u32 {
     std::cmp::max((pb.0 as isize - pa.0 as isize).abs(), (pb.1 as isize - pa.1 as isize).abs()) as u32
@@ -68,7 +67,7 @@ impl Node {
         self
     }
 
-    fn get_neighbours(&self, start: Node, nodes: &Vec<Node>) -> Vec<Node> {
+    /* fn get_neighbours(&self, start: Node, nodes: &Vec<Node>) -> Vec<Node> {
         let mut neighbours: Vec<Node> = vec![];
         for i in [-1, 0, 1] {
             for j in [-1, 0, 1] {
@@ -77,15 +76,15 @@ impl Node {
                 let mut node = self.clone();
                 node.pos.0 = (node.pos.0 as i32 + i) as u16;
                 node.pos.1 = (node.pos.1 as i32 + j) as u16;
-                if node.pos.0 >= 0 && node.pos.0 < AMOUNT_OF_CELLS_ROW as u16 {
-                    if node.pos.1 >= 0u16 && node.pos.1 < AMOUNT_OF_CELLS_ROW as u16 {
+                if node.pos.0 < AMOUNT_OF_CELLS_ROW as u16 {
+                    if node.pos.1 < AMOUNT_OF_CELLS_ROW as u16 {
                         neighbours.push(node.computed(start, nodes));
                     }
                 }
             }
         }
         neighbours
-    }
+    } */
 
     fn get_neighbours_ovh(&self, start: Node, nodes: &Vec<Node>) -> Vec<Node> {
         let mut neighbours: Vec<Node> = vec![];
@@ -93,7 +92,7 @@ impl Node {
             let mut node = self.clone();
             node.pos.0 = (node.pos.0 as i32 + i) as u16;
             node.pos.1 = (node.pos.1 as i32) as u16;
-            if node.pos.0 >= 0 && node.pos.0 < AMOUNT_OF_CELLS_ROW as u16 {
+            if node.pos.0 < AMOUNT_OF_CELLS_ROW as u16 {
                 neighbours.push(node.computed(start, nodes));
             }
         }
@@ -101,7 +100,7 @@ impl Node {
             let mut node = self.clone();
             node.pos.0 = (node.pos.0 as i32) as u16;
             node.pos.1 = (node.pos.1 as i32 + i) as u16;
-            if node.pos.1 >= 0 && node.pos.1 < AMOUNT_OF_CELLS_ROW as u16 {
+            if node.pos.1 < AMOUNT_OF_CELLS_ROW as u16 {
                 neighbours.push(node.computed(start, nodes));
             }
         }
@@ -133,7 +132,7 @@ fn get_path_nodes(node: &Node, nodes: &Vec<Node>) -> Vec<Node> {
     path
 }
 
-pub fn find_path(start_node: Node, end_node: Node, states: &mut Vec<CellState>) {
+/* pub fn find_path(start_node: Node, end_node: Node, states: &mut Vec<CellState>) {
     let mut opened: Vec<Node> = vec![start_node];
     let mut closed: Vec<Node> = vec![];
 
@@ -159,7 +158,7 @@ pub fn find_path(start_node: Node, end_node: Node, states: &mut Vec<CellState>) 
             return;
         }
 
-        for mut neighbour in current.get_neighbours(start_node, &closed) {
+        for mut neighbour in current.get_neighbours_ovh(start_node, &closed) {
             if !neighbour.is_traversable(states) || closed.contains(&neighbour) {
                 continue;
             }
@@ -178,7 +177,7 @@ pub fn find_path(start_node: Node, end_node: Node, states: &mut Vec<CellState>) 
             }
         }
     }
-}
+} */
 
 pub fn start_path_finding(start_node: Node, opened: &mut Vec<Node>, closed: &mut Vec<Node>) {
     opened.clear();
